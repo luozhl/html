@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="app-mobile-web-app-capable" content="yes"> <!-- 删除默认的苹果工具栏和菜单栏-->
+	<meta name="format-detection" content="telephone=no"> <!-- 取消自动为手机号自动检测-->
+	<meta http-equiv="x-rim-auto-match" content="none"><!-- 取消自动为手机号自动检测-->
+	<meta name="viewport" content="initial-scale-1,minimun-scale=1,maximun-scale-1,user-scalable=no">
+	<title>canvas-刮刮乐</title>
+	<style type="text/css">
+		*{
+			margin:0;
+			padding:0;
+		}
+		.box{
+			width:320px;
+			height:410px;
+			background:url(images/gao1.jpg) no-repeat;
+			background-size: 100% 100%
+		}
+		#canvas1{
+			psotion:absolute;
+			left:0;
+			top:0;
+		}
+	</style>
+</head>
+<body>
+	<div class="box">
+		<canvas id="canvas1" width="320" height="410">Your browser does not support the canvas element.</canvas>
+	</div>
+	<script type="text/javascript">
+		var canvas1 = document.getElementById("canvas1");	
+		var cxt = canvas1.getContext("2d");
+		var _x = canvas1.width;
+		var _y = canvas1.height;
+		var oImg = new Image();
+		oImg.src = "images/gao4.jpeg";
+		oImg.onload = function(){
+			cxt.beginPath();
+			cxt.drawImage(oImg,0,0,_x,_y);	
+			cxt.closePath();
+		}
+		var device = /android|ipone|ipad|webos|iemobile|oper mini|linux/i.test(navigator.userAgent.toLowerCase());
+		var startEvtName = device ? "touchstart":"mousedown" ;//判断是手机浏览器还是电脑  以确定不同的事件
+		var moveEveName = device ? "touchmove":"mousemove";
+		var endEveName = device ? "touchend":"mouseup";
+
+		function draw(event){
+			//获取原点坐标
+			var x = device ? event.touches[0].clientX : event.clientX;
+			var y = device ? event.touches[0].clientY : event.clientY;
+			//消除一个园
+			cxt.beginPath();
+			cxt.globalCompositeOperation = "destination-out"; //设置 目标图像之外的显示 
+			//目标图像透明
+			cxt.arc(x,y,20,0,2*Math.PI);
+			cxt.fill();
+			cxt.closePath();
+		}
+
+		canvas1.addEventListener(startEvtName,function(){
+			canvas1.addEventListener(moveEveName,draw,false);
+		},false);	
+		canvas1.addEventListener(endEveName,function(){
+			canvas1.removeEventListener(moveEveName,draw,false);
+		},false);
+
+	</script>
+</body>
+</html>

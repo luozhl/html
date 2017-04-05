@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script type="text/javascript">
+	  function Box(name){
+	  	this.name = name;
+	  	Box.prototype = {
+	  		name: "nameProto",
+	  		toString:function(){
+	  			console.log("toString 被调用了");
+	  			return "sss";
+	  		},
+	  		age:5
+	  	};
+	  }
+	  var box1 = new Box("name1");
+	  var box2 = new Box();
+
+      console.log(box1.age);
+      console.log(box1.__proto__);
+	  console.log(box1.toString());
+	  console.log(box2.age);
+	  console.log(box2.__proto__);
+	  console.log(box2.toString());
+
+	BoxA.prototype = {
+	  		name: "nameProto",
+	  		toString:function(){
+	  			return "sss";
+	  		},
+	  		age:5
+	  	}
+  	 function BoxA(name){
+	  	this.name = name;
+	  
+	  }
+
+	  
+	  var boxA = new BoxA("name1");
+
+	  console.log(boxA.toString());
+	 
+	</script>
+
+</head>
+<body>
+	
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>http接口测试</title>
+</head>
+<body>
+	<div>
+		
+		<div>
+			地址<input id="url"  type="text" /><input id="submit" type="button" value="发送">
+		</div>
+		<div>
+			请求方式 
+			<input name="httpType" type="radio" value="get" checked="checked">get
+			<input name="httpType" type="radio" value="post">post
+		</div>
+		<div >
+			附加请求头 <input id="requestHeader" type="text">
+		</div>
+		<div>参数<input id="params" type="text" rows="3"></div>
+
+		<div>
+			<span>返回值</span>
+			<textarea name="result" id="response" cols="30" rows="10">
+
+			</textarea>
+
+		</div>
+		
+	</div>
+	<script type="text/javascript">
+	//var name1;
+
+var value2;
+console.log(value2 == undefined);
+console.log(value2);
+console.log(value2 == undefined);
+
+		var submiit = document.getElementById("submiit");
+		submit.addEventListener("click",function(){
+
+			var httpType = "", httpTypes = document.getElementsByName("httpType");
+			var url = document.getElementById("url").value,
+			requestHeader = document.getElementById("requestHeader").value,
+			params = document.getElementById("params").value;
+			for (var i = 0,fl = httpTypes.length ; i < fl; i++) {
+				if(httpTypes[i].checked == true){
+					httpType = httpTypes[i].value;
+					break;
+				}
+			}
+			var xmlHttp = null;
+			if(window.XMLHttpRequest){
+				xmlHttp = new XMLHttpRequest();
+			}else if(window.ActiveXObject){
+				xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
+			}else{
+				alert("你的浏览器不支持XMLHTTP");
+				return;
+			}
+
+			if(url.indexOf("?") < 0 ){
+				url += "?" ;
+			}else{
+				url += "&";
+			}
+
+			//解决跨域的问题  
+            if(url.indexOf("http://")>=0){  
+                url.replace("?","&");  
+                url="Proxy?url=" +url;  
+            } 
+			
+			if(params.trim() == "" || params == null){
+				url +=  (new Date()).valueOf();
+			}else{
+				url += params + "&"+(new Date()).valueOf();
+			}
+
+			xmlHttp.open(httpType,url,true);
+			try{
+				var requestHeaders = requestHeader.split("&");
+				if(requestHeaders != null){
+					for(var i=0,lh = requestHeaders.length;i < lh ;i++){
+						var headers = requestHeaders[i].split("=")
+						xmlHttp.setRequestHeader(headers[0],headers[1]);
+					}
+				}
+				
+			}catch(e){
+
+			}
+			xmlHttp.onreadystatechange = function(){
+				if(xmlHttp.readyState == 4){
+					var result = document.getElementById("response");
+					result.innerHTML = xmlHttp.responseText;	
+				}
+			}
+		
+			xmlHttp.send(null);
+		});
+	</script>
+</body>
+</html>
